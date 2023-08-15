@@ -179,6 +179,8 @@ If you use Docker, the code has been verified to work on
 
 
 ## Installation
+使用Anaconda3创建python3.7的虚拟环境
+
 1. Clone this repository
 2. Install dependencies
    ```bash
