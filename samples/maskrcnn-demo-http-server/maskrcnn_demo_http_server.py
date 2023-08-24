@@ -8,9 +8,14 @@ from PIL import Image
 from flask import Flask, request
 from waitress import serve as waitress_serve
 import base64
+import tensorflow as tf
 
 logging.basicConfig(level=logging.INFO)
 
+# 限制GPU内存使用
+config = tf.ConfigProto()
+config.gpu_options.allow_growth=True
+sess = tf.Session(config=config)
 
 ROOT_DIR = os.path.abspath('../../')
 sys.path.append(ROOT_DIR)
