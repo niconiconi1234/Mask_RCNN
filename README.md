@@ -179,7 +179,7 @@ If you use Docker, the code has been verified to work on
 
 
 ## Installation
-使用Anaconda3创建python3.7的虚拟环境
+使用Anaconda3创建python3.7或python3.6的虚拟环境
 
 1. Clone this repository
 2. Install dependencies
@@ -196,6 +196,61 @@ If you use Docker, the code has been verified to work on
     * Linux: https://github.com/waleedka/coco
     * Windows: https://github.com/philferriere/cocoapi.
     You must have the Visual C++ 2015 build tools on your path (see the repo for additional details)
+### 使用docker镜像
+我们编写了`maskrcnn-demo-http-server`，可以通过http接口调用模型进行目标检测。我们还为`maskrcnn-demo-http-server`编写了docker镜像，可以直接使用。具体使用方法如下：
+1. 下载镜像
+```bash
+docker pull huajuan6848/maskrcnn-demo-http-server:0.0.2
+```
+2. 运行镜像
+```bash
+docker run -p 50052:50052 -d --gpus=all --rm --name maskrcnn-demo-http-server huajuan6848/maskrcnn-demo-http-server:0.0.2
+```
+3. 通过http调用maskrcnn
+
+使用POST方法调用`http://localhost:50052/maskrcnn`，请求格式如下：
+```json
+{
+    "image": "data:image/jpeg;base64,/9j/4R3+RXhpZgAASUkqAAgAAAAJAA8......", # 图片base64编码
+}
+```
+
+相应格式如下：
+```json
+{
+    "class_names": [
+        "person",
+        "car",
+    ],
+    "masks": [
+        "data:image/jpeg;base64,/9j/4AAQSkZJ.....", # mask base64编码
+        "data:image/jpeg;base64,/9j/4AAQSkZJ.....", # mask base64编码
+    ],
+    "rois": [
+        [
+            1084,
+            2183,
+            1419,
+            2272
+        ],
+        [
+            1102,
+            1886,
+            1209,
+            1946
+        ], # mask的左上角和右下角坐标(应该是)
+    ],
+    scores: [
+        0.9999997615814209,
+        0.9999997615814209, # mask的置信度
+    ]
+}
+```
+
+
+![call maskrcnn http](doc-asset/call_maskrcnn_http.png)
+
+
 
 # Projects Using this Model
 If you extend this model to other datasets or build projects that use it, we'd love to hear from you.
