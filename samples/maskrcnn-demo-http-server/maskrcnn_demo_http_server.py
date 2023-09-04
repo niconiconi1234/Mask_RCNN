@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 
 # 限制GPU内存使用
 config = tf.ConfigProto()
-config.gpu_options.allow_growth=True
+config.gpu_options.allow_growth = True
 sess = tf.Session(config=config)
 
 ROOT_DIR = os.path.abspath('../../')
@@ -90,6 +90,8 @@ def detect():
     def base64_to_numpy(b64_img):
         b64_img = ',' in b64_img and b64_img.split(',')[1] or b64_img
         img = Image.open(io.BytesIO(base64.b64decode(b64_img)))
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
         return np.array(img)
 
     b64_img = request.json['image']
